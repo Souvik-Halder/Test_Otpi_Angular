@@ -38,16 +38,20 @@ export class AppComponent {
     event.preventDefault();
 
     const clipboardData = event.clipboardData?.getData('text').trim();
-    if (!clipboardData || clipboardData.length !== this.otpFields.length)
-      return;
+    if (!clipboardData) return;
 
-    // Distribute the pasted data across the fields
-    clipboardData.split('').forEach((char, idx) => {
+    const otpArray = clipboardData.split('').slice(0, this.otpFields.length);
+
+    // Populate OTP fields with the pasted data
+    otpArray.forEach((char, idx) => {
       this.otp[idx] = char;
     });
 
-    // Focus the last field
-    this.focusLast();
+    // Automatically move focus to the last filled input
+    const lastFilledIndex = otpArray.length - 1;
+    if (lastFilledIndex >= 0) {
+      this.focusLast(lastFilledIndex);
+    }
   }
 
   private focusNext(index: number): void {
@@ -64,10 +68,10 @@ export class AppComponent {
     if (prevInput) prevInput.focus();
   }
 
-  private focusLast(): void {
+  private focusLast(index: number): void {
     const inputs = document.querySelectorAll('.otp-input');
-    if (inputs.length > 0) {
-      (inputs[inputs.length - 1] as HTMLInputElement).focus();
+    if (inputs.length > index) {
+      (inputs[index] as HTMLInputElement).focus();
     }
   }
 }

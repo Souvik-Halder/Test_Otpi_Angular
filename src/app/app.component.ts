@@ -16,9 +16,13 @@ export class AppComponent {
 
   // Handle single digit input
   onInput(event: Event, index: number): void {
+    const element = document.getElementById('para');
+    if (element) {
+      element.innerText = 'Working input';
+    }
     const input = event.target as HTMLInputElement;
     const value = input.value;
-
+    console.log('hi');
     if (value.length === 5) {
       this.otp = value.split('');
     }
@@ -39,7 +43,10 @@ export class AppComponent {
 
   // Handle paste event
   onPaste(event: ClipboardEvent): void {
-    let element = document.getElementById('para');
+    const element = document.getElementById('para');
+    if (element) {
+      element.innerText = 'Working input';
+    }
     event.preventDefault();
 
     const clipboardData = event.clipboardData?.getData('text').trim();

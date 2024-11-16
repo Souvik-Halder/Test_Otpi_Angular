@@ -45,7 +45,7 @@ export class AppComponent {
   onPaste(event: ClipboardEvent): void {
     const element = document.getElementById('para');
     if (element) {
-      element.innerText = 'Working input';
+      element.innerText = 'Working paste';
     }
     event.preventDefault();
 

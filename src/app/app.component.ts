@@ -16,11 +16,12 @@ export class AppComponent {
 
   // Handle single digit input
   onInput(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
     const element = document.getElementById('para');
     if (element) {
-      element.innerText = 'Working input';
+      element.innerText = 'Working input' + input.value;
     }
-    const input = event.target as HTMLInputElement;
+
     const value = input.value;
     console.log('hi');
     if (value.length === 5) {

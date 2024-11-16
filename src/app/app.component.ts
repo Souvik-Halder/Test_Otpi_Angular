@@ -35,6 +35,10 @@ export class AppComponent {
 
   // Handle paste event
   onPaste(event: ClipboardEvent): void {
+    let element = document.getElementById('para');
+    if (element) {
+      element.innerText = 'Working';
+    }
     event.preventDefault();
 
     const clipboardData = event.clipboardData?.getData('text').trim();

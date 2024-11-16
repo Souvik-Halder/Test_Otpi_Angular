@@ -3,11 +3,11 @@
     *ngFor="let otpField of otpFields; let i = index"
     type="text"
     maxlength="1"
+    (click)="onClick($event, i)"
     class="otp-input"
     [(ngModel)]="otp[i]"
     (input)="onInput($event, i)"
     (keydown)="onKeyDown($event, i)"
     (paste)="onPaste($event)"
   />
-  <p id="para"></p>
 </div>

@@ -11,25 +11,51 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+  onClick($event: MouseEvent, i: number) {
+    const input = $event.target as HTMLInputElement;
+    if (i === 0) {
+      input.maxLength = 6;
+    } else {
+    }
+  }
   otpFields = Array(5).fill(0); // Create 5 input fields dynamically
   otp: string[] = Array(5).fill(''); // Store OTP values
 
   // Handle single digit input
   onInput(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    const element = document.getElementById('para');
-    if (element) {
-      element.innerText = 'Working input' + input.value;
-    }
+    if (index === 0) {
+      let whole_value = '';
+      const input = event.target as HTMLInputElement;
+      const value = input.value;
+      if (value.length > 1 && value.length === 5) {
+        whole_value = value;
+        input.maxLength = 1;
+        input.value = value.slice(0, 1);
+      }
+      if (value.length === 1 && index < this.otpFields.length - 1) {
+        this.focusNext(index);
+      }
+      if (whole_value !== '') {
+        const otpArray = whole_value.split('').slice(0, this.otpFields.length);
 
-    const value = input.value;
-    console.log('hi');
-    if (value.length === 5) {
-      this.otp = value.split('');
-    }
+        // Populate OTP fields with the pasted data
+        otpArray.forEach((char, idx) => {
+          this.otp[idx] = char;
+        });
 
-    if (value.length === 1 && index < this.otpFields.length - 1) {
-      this.focusNext(index);
+        // Automatically move focus to the last filled input
+        const lastFilledIndex = otpArray.length - 1;
+        if (lastFilledIndex >= 0) {
+          this.focusLast(lastFilledIndex);
+        }
+      }
+    } else {
+      const input = event.target as HTMLInputElement;
+      const value = input.value;
+
+      if (value.length === 1 && index < this.otpFields.length - 1) {
+        this.focusNext(index);
+      }
     }
   }
 
@@ -44,10 +70,7 @@ export class AppComponent {
 
   // Handle paste event
   onPaste(event: ClipboardEvent): void {
-    const element = document.getElementById('para');
-    if (element) {
-      element.innerText = 'Working paste';
-    }
+    let element = document.getElementById('para');
     event.preventDefault();
 
     const clipboardData = event.clipboardData?.getData('text').trim();

@@ -19,6 +19,10 @@ export class AppComponent {
     const input = event.target as HTMLInputElement;
     const value = input.value;
 
+    if (value.length === 5) {
+      this.otp = value.split('');
+    }
+
     if (value.length === 1 && index < this.otpFields.length - 1) {
       this.focusNext(index);
     }
@@ -36,9 +40,6 @@ export class AppComponent {
   // Handle paste event
   onPaste(event: ClipboardEvent): void {
     let element = document.getElementById('para');
-    if (element) {
-      element.innerText = 'Working';
-    }
     event.preventDefault();
 
     const clipboardData = event.clipboardData?.getData('text').trim();

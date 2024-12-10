@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  input,
+  OnInit,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 
@@ -10,18 +17,19 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
-  onClick($event: MouseEvent, i: number) {
-    const input = $event.target as HTMLInputElement;
-    if (i === 0) {
-      input.maxLength = 6;
-    } else {
-    }
-  }
-  otpFields = Array(5).fill(0); // Create 5 input fields dynamically
-  otp: string[] = Array(5).fill(''); // Store OTP values
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+    const inputs = document.querySelectorAll('.otp-input');
+    const input = inputs[0] as HTMLInputElement;
+    console.log('Input are ');
+    input.focus();
 
-  // Handle single digit input
+    input.maxLength = 6;
+  }
+  otpFields = Array(6).fill(0);
+  otp: string[] = Array(6).fill('');
+  phn_num: string = '';
+
   onInput(event: Event, index: number): void {
     if (index === 0) {
       let whole_value = '';
@@ -33,6 +41,7 @@ export class AppComponent {
         input.value = value.slice(0, 1);
       }
       if (value.length === 1 && index < this.otpFields.length - 1) {
+        input.maxLength = 1;
         this.focusNext(index);
       }
       if (whole_value !== '') {
@@ -109,5 +118,63 @@ export class AppComponent {
     if (inputs.length > index) {
       (inputs[index] as HTMLInputElement).focus();
     }
+  }
+  omit_special_char(event: KeyboardEvent) {
+    console.log('first');
+    var k;
+    k = event.key.charCodeAt(0); //        k = event.keyCode;  (Both can be used)
+    console.log(k);
+
+    return (
+      (k > 64 && k < 91) ||
+      (k > 96 && k < 123) ||
+      k == 8 ||
+      (k >= 48 && k <= 57)
+    );
+  }
+  onPaste_omit_specilachar(event: ClipboardEvent) {
+    event.preventDefault();
+    console.log(event.clipboardData?.getData('text').trim());
+    const data = event.clipboardData?.getData('text').trim();
+    let modified_data = '';
+    if (!data) return;
+
+    const n = data?.length;
+    for (let i = 0; i < n; i++) {
+      const k = data.charCodeAt(i);
+      if (
+        (k > 64 && k < 91) ||
+        (k > 96 && k < 123) ||
+        k == 8 ||
+        (k >= 48 && k <= 57)
+      ) {
+        modified_data += data.charAt(i);
+      }
+    }
+    this.phn_num = modified_data;
+  }
+
+  onInput_omit_specilachar(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const data = input.value;
+
+    let modified_data = '';
+    if (!data) return;
+
+    const n = data?.length;
+    for (let i = 0; i < n; i++) {
+      const k = data.charCodeAt(i);
+      if (
+        (k > 64 && k < 91) ||
+        (k > 96 && k < 123) ||
+        k == 8 ||
+        (k >= 48 && k <= 57)
+      ) {
+        modified_data += data.charAt(i);
+      }
+    }
+
+    input.value = modified_data;
+    this.phn_num = modified_data;
   }
 }

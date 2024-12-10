@@ -3,11 +3,21 @@
     *ngFor="let otpField of otpFields; let i = index"
     type="text"
     maxlength="1"
-    (click)="onClick($event, i)"
     class="otp-input"
     [(ngModel)]="otp[i]"
     (input)="onInput($event, i)"
     (keydown)="onKeyDown($event, i)"
     (paste)="onPaste($event)"
+  />
+</div>
+<div>
+  <input
+    id="phn-input"
+    class="otp-input1"
+    inputmode="numeric"
+    [(ngModel)]="phn_num"
+    (keypress)="omit_special_char($event)"
+    (paste)="onPaste_omit_specilachar($event)"
+    (input)="onInput_omit_specilachar($event)"
   />
 </div>

@@ -11,3 +11,12 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+.otp-input1 {
+  width: 240px;
+  height: 40px;
+  font-size: 18px;
+  margin-top: 30px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

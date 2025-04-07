@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   input,
@@ -22,23 +23,18 @@ import { filter } from 'rxjs';
 export class AppComponent implements AfterViewInit {
   @ViewChild('myInput') myInput: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cdRef: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     // Use setTimeout to ensure the input is fully rendered before focusing
     setTimeout(() => {
-      if (this.myInput) {
-        this.myInput.nativeElement.focus();
-        this.myInput.nativeElement.autoFocus = true;
-        this.router.events
-          .pipe(filter((event) => event instanceof NavigationEnd))
-          .subscribe(() => {
-            if (this.myInput) {
-              this.myInput.nativeElement.focus();
-            }
-          });
+      this.cdRef.detectChanges();
+      const inputElement = document.getElementById(
+        'myInput'
+      ) as HTMLInputElement;
+      if (inputElement) {
+        inputElement.focus();
       }
-      this.myInput.native;
-    }, 300); // Adding a small delay to ensure it works properly
+    }, 500); // Adding a small delay to ensure it works properly
   }
 }
